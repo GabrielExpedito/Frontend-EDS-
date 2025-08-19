@@ -1,48 +1,69 @@
-//import "./CadastroFuncionario.tsx";
 import { useEffect, useState } from "react";
 import "./App.css";
 
 type Cargo = {
   cdCargo: number;
   nmCargo: string;
-  dtCriacao: Date;
-  salario: number;
 };
 
-type Funcionario = {
-  nome: string;
-  cpf: string;
-  dtAdmissao: string;
-  email: string;
-  cargo: Cargo;
+type Endereco = {
+  id: number;
+  rua: string;
+  cep: string;
+  bairro: string;
+  nr: number;
+};
+
+type Terceirizacao = {
+  cdTerceirizacao: number;
+  nmTerceirizacao: string;
 };
 
 export default function CadastroFuncionario() {
   const [cargos, setCargos] = useState<Cargo[]>([]);
+  const [enderecos, setEnderecos] = useState<Endereco[]>([]);
+  const [terceirizacoes, setTerceirizacoes] = useState<Terceirizacao[]>([]);
+
   const [formData, setFormData] = useState({
     nome: "",
     cpf: "",
     dtAdmissao: "",
     email: "",
     cdCargo: "",
+    idEndereco: "",
+    cdTerceirizacao: "",
   });
 
-  console.log("Cargos no estado:", cargos);
-
+  // Buscar dados iniciais
   useEffect(() => {
-    async function fetchCargos() {
+    async function fetchData() {
       try {
-        const res = await fetch("http://localhost:8080/api/Cargo");
-        if (!res.ok) throw new Error("Erro ao buscar cargos");
-        const data = await res.json();
-        console.log("CARGOS CARREGADOS:", data); // <--- VERIFICAÇÃO
-        setCargos(data);
-      } catch (error) {
-        console.error("Erro ao carregar cargos:", error);
+        const [cargosRes, enderecosRes, terceirizacoesRes] = await Promise.all([
+          fetch("http://localhost:8080/api/Cargo"),
+          fetch("http://localhost:8080/api/Endereco"),
+          fetch("http://localhost:8080/api/Terceirizacao"),
+        ]);
+
+        if (!cargosRes.ok || !enderecosRes.ok || !terceirizacoesRes.ok) {
+          throw new Error("Erro ao carregar dados");
+        }
+
+        const [cargosData, enderecosData, terceirizacoesData] =
+          await Promise.all([
+            cargosRes.json(),
+            enderecosRes.json(),
+            terceirizacoesRes.json(),
+          ]);
+
+        setCargos(cargosData);
+        setEnderecos(enderecosData);
+        setTerceirizacoes(terceirizacoesData);
+      } catch (err) {
+        console.error("Erro ao carregar dados:", err);
       }
     }
 
-    fetchCargos();
+    fetchData();
   }, []);
 
   function handleChange(
@@ -54,21 +75,14 @@ export default function CadastroFuncionario() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    const cargoSelecionado = cargos.find(
-      (c) => c.cdCargo === parseInt(formData.cdCargo)
-    );
-
-    if (!cargoSelecionado) {
-      alert("Cargo inválido!");
-      return;
-    }
-
-    const funcionario: Funcionario = {
+    const funcionario = {
       nome: formData.nome,
       cpf: formData.cpf,
       dtAdmissao: formData.dtAdmissao,
       email: formData.email,
-      cargo: cargoSelecionado,
+      cargo: { cdCargo: parseInt(formData.cdCargo) },
+      endereco: { id: parseInt(formData.idEndereco) },
+      terceirizacao: { cdTerceirizacao: parseInt(formData.cdTerceirizacao) },
     };
 
     try {
@@ -86,9 +100,12 @@ export default function CadastroFuncionario() {
           dtAdmissao: "",
           email: "",
           cdCargo: "",
+          idEndereco: "",
+          cdTerceirizacao: "",
         });
       } else {
-        alert("Erro ao cadastrar funcionário.");
+        const errorText = await res.text();
+        alert("Erro ao cadastrar funcionário: " + errorText);
       }
     } catch (err) {
       console.error(err);
@@ -97,7 +114,7 @@ export default function CadastroFuncionario() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="form-funcionario">
       <h2>Cadastro de Funcionário</h2>
 
       <label>Nome:</label>
@@ -147,6 +164,36 @@ export default function CadastroFuncionario() {
         {cargos.map((cargo) => (
           <option key={cargo.cdCargo} value={cargo.cdCargo}>
             {cargo.nmCargo}
+          </option>
+        ))}
+      </select>
+
+      <label>Endereço:</label>
+      <select
+        name="idEndereco"
+        value={formData.idEndereco}
+        onChange={handleChange}
+        required
+      >
+        <option value="">Selecione um endereço</option>
+        {enderecos.map((end) => (
+          <option key={end.id} value={end.id}>
+            {end.rua}, {end.nr} - {end.bairro}
+          </option>
+        ))}
+      </select>
+
+      <label>Terceirização:</label>
+      <select
+        name="cdTerceirizacao"
+        value={formData.cdTerceirizacao}
+        onChange={handleChange}
+        required
+      >
+        <option value="">Selecione uma terceirização</option>
+        {terceirizacoes.map((t) => (
+          <option key={t.cdTerceirizacao} value={t.cdTerceirizacao}>
+            {t.nmTerceirizacao}
           </option>
         ))}
       </select>
