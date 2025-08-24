@@ -2,17 +2,16 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import CadastroFuncionario from "./CadastroFuncionario";
+import CadastroCargo from "./CadastroCargo";
+import logoEDS from "./assets/logo.png";
 
-// Telas de exemplo
+// Tela inicial de exemplo
 function TelaInicial() {
-  return <h2>Tela Inicial</h2>;
-}
-
-function CadastroCargo() {
   return (
-    <div className="form-container">
-      <h2>Cadastro de Cargo</h2>
-      {/* Adicione o componente de cargo aqui futuramente */}
+    <div className="home-container">
+      <img src={logoEDS} alt="Logo EDS" className="logo" />
+      <h2>Bem-vindo à EDS</h2>
+      <p>Software de controle de processos internos</p>
     </div>
   );
 }
