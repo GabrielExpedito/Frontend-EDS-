@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import CadastroFuncionario from "./CadastroFuncionario";
 import CadastroCargo from "./CadastroCargo";
+import RelatorioFerias from "./RelatorioFerias"; // ✅ importa o relatório
 import logoEDS from "./assets/logo.png";
 
 // Tela inicial de exemplo
@@ -26,6 +27,7 @@ export default function App() {
             <li><Link to="/">Início</Link></li>
             <li><Link to="/cadastro-funcionario">Funcionário</Link></li>
             <li><Link to="/cadastro-cargo">Cargo</Link></li>
+            <li><Link to="/relatorio-ferias">Relatório de Férias</Link></li> {/* ✅ novo item */}
           </ul>
         </aside>
 
@@ -34,6 +36,7 @@ export default function App() {
             <Route path="/" element={<TelaInicial />} />
             <Route path="/cadastro-funcionario" element={<CadastroFuncionario />} />
             <Route path="/cadastro-cargo" element={<CadastroCargo />} />
+            <Route path="/relatorio-ferias" element={<RelatorioFerias />} /> {/* ✅ nova rota */}
           </Routes>
         </main>
       </div>

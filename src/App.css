@@ -106,7 +106,6 @@ form button:hover {
   height: 100%;
 }
 
-
 .logo {
   width: 200px;
   max-width: 40%;
@@ -116,14 +115,81 @@ form button:hover {
 
 @media (max-width: 768px) {
   .logo {
-    width: 150px; 
+    width: 150px;
     max-width: 60%;
   }
 }
 
 @media (max-width: 480px) {
   .logo {
-    width: 120px; 
+    width: 120px;
     max-width: 80%;
   }
+}
+
+/* Estilos para o Relatório de Férias */
+.relatorio-ferias {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.relatorio-ferias h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-align: left;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 10px;
+}
+
+.relatorio-ferias table {
+  width: 100%;
+  border-collapse: collapse; /* Remove o espaço entre as bordas */
+  margin-top: 15px;
+}
+
+.relatorio-ferias th,
+.relatorio-ferias td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Estilo do cabeçalho da tabela */
+.relatorio-ferias thead th {
+  background-color: #34495e;
+  color: white;
+  font-weight: 600;
+  border-bottom: 2px solid #2c3e50;
+}
+
+/* Linhas zebradas para melhor legibilidade */
+.relatorio-ferias tbody tr:nth-of-type(even) {
+  background-color: #f8f9fa;
+}
+
+.relatorio-ferias tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+/* Badges de Status (Aprovado / Não Aprovado) */
+.status {
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+  font-size: 0.85em;
+  text-align: center;
+  display: inline-block;
+  min-width: 90px;
+}
+
+.status-aprovado {
+  background-color: #28a745; /* Verde */
+}
+
+.status-reprovado {
+  background-color: #dc3545; /* Vermelho */
 }
